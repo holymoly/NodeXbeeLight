@@ -1,24 +1,6 @@
 extends layout
 
 block content
-  div(class='col-md-12')
-    H3 Xbee 1
-    div(class='col-md-12 col-xs-12')
-      div(class='col-md-1 col-xs-2') red
-      div(class='col-md-3 col-xs-5')
-        input(name='rangeRed' id='rangeRed', type='range',value='0' min='0', max='255', step='1')
-    div(class='col-md-12 col-xs-12')
-      div(class='col-md-1 col-xs-2') green
-      div(class='col-md-3 col-xs-5')
-        input(name='rangeGreen' id='rangeGreen', type='range',value='0' min='0', max='255', step='1')
-    div(class='col-md-12 col-xs-12')
-      div(class='col-md-1 col-xs-2') blue
-      div(class='col-md-3 col-xs-5')
-        input(name='rangeBlue' id='rangeBlue', type='range',value='0' min='0', max='255', step='1')
-    div(class='col-md-12 col-xs-12')
-      div(class='col-md-1 col-xs-2') white
-      div(class='col-md-3 col-xs-5')
-        input(name='rangeWhite' id='rangeWhite', type='range',value='0' min='0', max='255', step='1')
-  script(src="//code.jquery.com/jquery-1.11.0.min.js")
-  script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js")
+  div(id='xbeeNodeList')
+  script(src='/socket.io/socket.io.js')
   script(src='/javascripts/scripts.js')

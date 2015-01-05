@@ -25,7 +25,7 @@ function Xbee() {
   xbeeApi.on('frame_object', function(frame) {
     if(frame.command === 'ND'){
       self.nodeInfos.push(frame.nodeIdentification);
-      self.emit('discovered',frame);
+      self.emit('discovered',frame.nodeIdentification);
     }
   });
 
