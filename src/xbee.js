@@ -23,6 +23,7 @@ function Xbee() {
 
   // All frames parsed by the XBee will be emitted here
   xbeeApi.on('frame_object', function(frame) {
+    console.log(frame);
     if(frame.command === 'ND'){
       self.nodeInfos.push(frame.nodeIdentification);
       self.emit('discovered',frame.nodeIdentification);
@@ -68,5 +69,10 @@ Xbee.prototype.sendData = function(data, destination64) {
   }
   serialPort.write(xbeeApi.buildFrame(frame_obj));
 }
-
+/*
+process.on('uncaughtException', function(err) {
+    // handle the error safely
+    console.log(err);
+});
+*/
 module.exports = Xbee;

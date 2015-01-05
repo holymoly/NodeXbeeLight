@@ -16,6 +16,7 @@ io.sockets.on('connection', function (socket) {
   // Init socket
   socketEventsListers.setSessionSocket(socket);
   socketEventsListers.init(socket);
+  socketEventsListers.setColor(socket);
 
   //socketEventsListers.discon(socket);
   socket.on('disconnect', socketEventsListers.resetSessionSocket)

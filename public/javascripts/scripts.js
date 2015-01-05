@@ -10,7 +10,8 @@ function createXbeeNode(data){
   var colors = ['red', 'green', 'blue', 'white'];
 
   var div1 = $("<div/>")
-    .addClass('col-md-6');
+    .addClass('col-md-6')
+    .attr('id', data.remote64);
   var h3 = $("<H3/>")
     .text(data.remote64)
     .appendTo(div1);
@@ -29,11 +30,13 @@ function createXbeeNode(data){
     var input1 = $("<input/>")
       .attr('type', 'range')
       .attr('value', '0')
+      .attr('data-color', color)
+      .attr('data-node', data.remote64)
       .attr('min', '0')
       .attr('max', '255')
       .attr('step', '1')
-      .attr('oninput','setColor(this)')
-      .attr('onchange','setColor(this)')
+      .attr('oninput',"setColor('" + data.remote64 + "')")
+      .attr('onchange',"setColor('" + data.remote64 + "')")
       .appendTo(div4);
   });
   div1.appendTo(root);
@@ -56,31 +59,16 @@ function createXbeeNode(data){
   nodeInfo.appendTo(root);
 }
 
-function setColor(color){
-  console.log('change');
-}
-/*
-$("[name='range']").on('change', function(){
-  console.log('change');
-  ajaxRequest({ red: $('#rangeRed').val(),
-                green: $('#rangeGreen').val(),
-                blue: $('#rangeBlue').val(),
-                white: $('#rangeWhite').val()
-              },'/colorChange');
-});
-*/
-function ajaxRequest(data,url){
-  $.ajax({
-    url: url,
-    data: data,
-    type: 'post',
-    dataType: 'json',
-    success: function(data) {
-      console.log(data);
-    },
-    error: function (request, status, error) {
-      console.log('Error during request. request.responseText: ' + request.responseText + ' Error: ' + error + ' Status: ' + status);
-    }
-  });
-  return false;
+function setColor(remote64) {
+  var nodeElement = document.getElementById(remote64);
+  var colors = $(nodeElement).find("[data-node='" + remote64 + "']");
+  var data = {};
+
+  data['remote64'] = remote64;
+  data[$(colors[0]).data('color')] = $(colors[0]).val();
+  data[$(colors[1]).data('color')] = $(colors[1]).val();
+  data[$(colors[2]).data('color')] = $(colors[2]).val();
+  data[$(colors[3]).data('color')] = $(colors[3]).val();
+
+  socket.emit('setColor', data );
 }

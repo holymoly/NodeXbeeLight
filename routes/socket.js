@@ -28,6 +28,13 @@ exports.init = function(socket) {
   }
 };
 
+// Set color event
+exports.setColor = function(socket){
+  socket.on('setColor', function(data) {
+    xbeeNode.sendData([parseInt(data.red,10), parseInt(data.green,10),parseInt(data.blue,10), parseInt(data.white,10)],data.remote64);
+  });
+};
+
 xbeeNode.on("discovered", function(res) {
   console.log(res);
   sessionSocket.emit('addNodes',res);
