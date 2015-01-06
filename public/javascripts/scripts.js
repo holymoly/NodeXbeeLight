@@ -1,13 +1,13 @@
 var socket = io.connect();
 
-socket.on('addNodes',function(data){
-  console.log(data);
-  createXbeeNode(data);
+socket.on('addNodes',function(data, colorValues){
+  createXbeeNode(data, colorValues);
 });
 
-function createXbeeNode(data){
+function createXbeeNode(data, colorValues){
   var root = $('#xbeeNodeList');
   var colors = ['red', 'green', 'blue', 'white'];
+  var values = JSON.parse(colorValues);
 
   var div1 = $("<div/>")
     .addClass('col-md-6')
@@ -15,7 +15,6 @@ function createXbeeNode(data){
   var h3 = $("<H3/>")
     .text(data.remote64)
     .appendTo(div1);
-
   colors.forEach(function(color) {
     var div2 = $("<div/>")
       .addClass('col-md-12')
@@ -29,7 +28,7 @@ function createXbeeNode(data){
       .appendTo(div2);
     var input1 = $("<input/>")
       .attr('type', 'range')
-      .attr('value', '0')
+      .attr('value', values[color])
       .attr('data-color', color)
       .attr('data-node', data.remote64)
       .attr('min', '0')

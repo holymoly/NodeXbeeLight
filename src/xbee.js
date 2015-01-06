@@ -23,7 +23,7 @@ function Xbee() {
 
   // All frames parsed by the XBee will be emitted here
   xbeeApi.on('frame_object', function(frame) {
-    console.log(frame);
+    //console.log(frame);
     if(frame.command === 'ND'){
       self.nodeInfos.push(frame.nodeIdentification);
       self.emit('discovered',frame.nodeIdentification);

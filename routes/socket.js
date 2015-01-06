@@ -1,4 +1,5 @@
 var xbee = require('../src/xbee.js');
+var fs = require("fs");
 
 var xbeeNode = new xbee();
 var sessionSocket = undefined;
@@ -22,7 +23,9 @@ exports.init = function(socket) {
       xbeeNode.nodeDiscover();
     } else {
       xbeeNode.nodeInfos.forEach(function(node){
-        sessionSocket.emit('addNodes', node);
+        readColor(node.remote64, node,function(err,colors){
+          sessionSocket.emit('addNodes', node, colors );
+        });
       });
     }
   }
@@ -31,14 +34,35 @@ exports.init = function(socket) {
 // Set color event
 exports.setColor = function(socket){
   socket.on('setColor', function(data) {
+    fs.writeFile('./session/' + data.remote64, JSON.stringify( data , null, 2), function(err) {
+      if(err) {
+        console.log(err);
+      } else {
+        console.log("JSON saved to " + data.remote64);
+      }
+    });
     xbeeNode.sendData([parseInt(data.red,10), parseInt(data.green,10),parseInt(data.blue,10), parseInt(data.white,10)],data.remote64);
   });
 };
 
+
 xbeeNode.on("discovered", function(res) {
-  console.log(res);
-  sessionSocket.emit('addNodes',res);
+  readColor(res.remote64, res,function(err,colors){
+    sessionSocket.emit('addNodes', res, colors );
+  });
 });
+
+function readColor(remote64,res,cb) {
+  fs.readFile('./session/' + remote64, 'utf8', function (err,data) {
+    if (err) {
+      colorValues = {remote64 : res.remote64, red : 0, green : 0, blue : 0, white : 0 };
+      console.log(err);
+      cb(err, colorValues);
+    } else {
+      cb(null, data);
+    }
+  });
+}
 
 xbeeNode.on("error", function(err) {
   console.log('Error:');
